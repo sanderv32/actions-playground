@@ -1,5 +1,4 @@
 on: pull_request_review
-types: [submitted]
 
 name: Playing with actions
 
@@ -17,13 +16,12 @@ jobs:
           echo "Building"
 
   deploy:
-    if: github.event.review.state == 'approved'
     name: Deploy Image
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - uses: sakhnovict/multi-approved-event-action@1.0.3
+      - uses: taichi/approved-event-action@v1.2.1
         id: approved
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,4 +30,4 @@ jobs:
         id: deploy
         run: |
           echo "Deploying image"
-        if: steps.approved.outputs.isApproved == 'true'
+        if: steps.approved.outputs.approved == 'true'
