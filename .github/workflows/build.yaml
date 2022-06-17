@@ -24,7 +24,7 @@ jobs:
     needs: build
 
     steps:
-      - uses: luisrjaeger/approved-event-checker@v1.0.0
+      - uses: sakhnovict/multi-approved-event-action@1.0.3
         id: approved
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,4 +33,4 @@ jobs:
         id: deploy
         run: |
           echo "Deploying image"
-        if: ${{ steps.approved.outputs.approved == 'true' }}
+        if: steps.approved.outputs.isApproved == 'true'
