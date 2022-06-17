@@ -1,7 +1,5 @@
-on:
-  workflow_dispatch:
-  push:
-    branches: [master]
+on: pull_request_review
+types: [submitted]
 
 name: Playing with actions
 
