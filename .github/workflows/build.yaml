@@ -19,6 +19,8 @@ jobs:
     name: Deploy Image
     runs-on: ubuntu-latest
     needs: build
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
     steps:
       - uses: taichi/approved-event-action@v1.2.1
