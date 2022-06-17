@@ -19,13 +19,19 @@ jobs:
           echo "Building"
 
   deploy:
+    if: github.event.review.state == 'approved'
     name: Deploy Image
     runs-on: ubuntu-latest
     needs: build
 
     steps:
+      - uses: sakhnovict/multi-approved-event-action@1.0.3
+        id: approved
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploying image
         id: deploy
         run: |
           echo "Deploying image"
-        if: github.event.review.state == 'approved'
+        if: steps.approved.outputs.isApproved == 'true'
