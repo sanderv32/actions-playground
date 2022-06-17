@@ -1,0 +1,36 @@
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+name: Playing with actions
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    env:
+      PUSH_PACKAGES: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+    steps:
+      - name: Build image
+        id: tag
+        run: |
+          echo "Building"
+
+  deploy:
+    name: Deploy Image
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: taichi/approved-event-action@v1.2.1
+        id: approved
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploying image
+        id: deploy
+        run: |
+          echo "Deploying image"
+        if: steps.approved.outputs.approved == 'true'
