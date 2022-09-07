@@ -1,5 +1,5 @@
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       container_tag:
         description: "Tag of container"
