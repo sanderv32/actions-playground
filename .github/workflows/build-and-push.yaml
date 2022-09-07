@@ -27,7 +27,7 @@ jobs:
       - name: Build image
         id: tag
         run: |
-          echo "Building"
+          echo "Building ${{ inputs.container_tag }}"
 
   push:
     name: Push container to ECR
@@ -38,4 +38,4 @@ jobs:
     steps:
       - name: Push container to ECR
         run: |
-          echo "Pushing container"
+          echo "Pushing container ${{ inputs.container_tag }}"
