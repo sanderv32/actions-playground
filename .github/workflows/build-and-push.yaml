@@ -7,8 +7,6 @@ on:
         default: "test1"
         type: string
 
-name: Playing with actions
-
 jobs:
   build:
     name: Build Image
