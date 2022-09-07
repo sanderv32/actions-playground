@@ -8,9 +8,11 @@ jobs:
     uses: ./.github/workflows/build-and-push.yaml
     with:
       environment: "non-prod"
+      container_tag: "1234"
 
   prod:
     name: Build production container
     uses: ./.github/workflows/build-and-push.yaml
     with:
       environment: "prod"
+      container_tag: "qwerty"
