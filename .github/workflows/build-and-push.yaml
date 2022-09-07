@@ -7,8 +7,6 @@ on:
         default: "test1"
         type: string
 
-name: Playing with actions
-
 jobs:
   build:
     name: Build Image
@@ -19,3 +17,14 @@ jobs:
         id: tag
         run: |
           echo "Building"
+
+  push:
+    name: Push container to ECR
+    needs: build
+    runs-on: ubuntu-latest
+    environment: non-prod
+
+    steps:
+      - name: Push container to ECR
+        run: |
+          echo "Pushing container"

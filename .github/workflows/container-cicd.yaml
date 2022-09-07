@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  non-prod:
+    uses: ./.github/workflows/build-and-push.yaml
+    environment:
+      name: non-prod
+
+  prod:
+    uses: ./.github/workflows/build-and-push.yaml
+    environment:
+      name: prod
