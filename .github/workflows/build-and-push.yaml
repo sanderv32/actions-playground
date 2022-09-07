@@ -6,6 +6,17 @@ on:
         required: true
         default: "test1"
         type: string
+      environment:
+        description: "Environment to deploy container"
+        required: false
+        default: "non-prod"
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: write
 
 jobs:
   build:
@@ -22,7 +33,7 @@ jobs:
     name: Push container to ECR
     needs: build
     runs-on: ubuntu-latest
-    environment: non-prod
+    environment: ${{ inputs.environment }}
 
     steps:
       - name: Push container to ECR

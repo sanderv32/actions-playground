@@ -3,11 +3,13 @@ on:
 
 jobs:
   non-prod:
+    name: Build non-production container
     uses: ./.github/workflows/build-and-push.yaml
-    environment:
-      name: non-prod
+    with:
+      environment: "non-prod"
 
   prod:
+    name: Build production container
     uses: ./.github/workflows/build-and-push.yaml
-    environment:
-      name: prod
+    with:
+      environment: "prod"
