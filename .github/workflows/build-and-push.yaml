@@ -29,7 +29,7 @@ permissions:
 
 jobs:
   build:
-    if: inputs.environment == "non-prod"
+    if: inputs.environment == 'non-prod'
     name: Build Image
     runs-on: ubuntu-latest
 
