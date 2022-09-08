@@ -11,6 +11,7 @@ jobs:
     with:
       environment: "non-prod"
       container_tag: "1234"
+      registry: "blabla-non-prod"
 
   prod:
     name: Build production container
@@ -18,3 +19,4 @@ jobs:
     with:
       environment: "prod"
       container_tag: "qwerty"
+      registry: "blabla-prod"
