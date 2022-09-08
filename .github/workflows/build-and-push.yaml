@@ -3,15 +3,22 @@ name: build-and-push
 on:
   workflow_call:
     inputs:
+      registry:
+        description: "Container registry to use"
+        required: true
+        type: string
       container_tag:
         description: "Tag of container"
         required: true
-        default: "test1"
         type: string
       environment:
         description: "Environment to deploy container"
         required: false
         default: "non-prod"
+        type: string
+      container_name:
+        description: "Name of the container"
+        required: true
         type: string
 
 permissions:
@@ -26,18 +33,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
       - name: Build image
         id: tag
         run: |
           echo "Building ${{ inputs.container_tag }}"
-
-  push:
-    name: Push container to ECR
-    needs: build
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-
-    steps:
       - name: Push container to ECR
         run: |
           echo "Pushing container ${{ inputs.container_tag }}"
