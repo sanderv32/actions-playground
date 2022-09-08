@@ -1,24 +1,22 @@
 name: container-cicd
 
 on:
-  push:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Deploy into
+        required: true
+        type: choice
+        options:
+          - non-prod
+          - prod
 
 jobs:
-  non-prod:
-    name: Build non-production container
+  build-container-cicd:
+    name: Build container
     uses: ./.github/workflows/build-and-push.yaml
     with:
-      environment: "non-prod"
+      environment: "${{ inputs.environment }}"
       container_tag: "1234"
-      registry: "blabla-non-prod"
+      registry: "blabla-${{ inputs.environment }}"
       container_name: "container1"
-
-  prod:
-    name: Build production container
-    uses: ./.github/workflows/build-and-push.yaml
-    with:
-      environment: "prod"
-      container_tag: "qwerty"
-      registry: "blabla-prod"
-      container_name: "container2"
