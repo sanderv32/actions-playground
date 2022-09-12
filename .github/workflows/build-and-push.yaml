@@ -56,6 +56,9 @@ jobs:
         run: |
           echo "Building ${{ inputs.container_tag }}"
           export VERSION=$(date +%Y%m%d)
+          echo "docker login -u ${source_username} --password ${source_password} ${source_registry}"
+          echo "docker build --build-arg TAG=${{inputs.container_tag}} --tag ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:${VERSION}.${GITHUB_RUN_NUMBER} ."
+          echo "docker tag ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:${VERSION}.${GITHUB_RUN_NUMBER} ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:active"
 
       - name: Push container to ECR
         run: |
