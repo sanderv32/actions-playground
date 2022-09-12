@@ -82,3 +82,5 @@ jobs:
           echo "....."
 
       - name: Push container to prod
+        run: |
+          echo "Pushing container to prod"
