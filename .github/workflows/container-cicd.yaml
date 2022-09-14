@@ -15,6 +15,15 @@ jobs:
   build-container-cicd:
     name: Build container
     uses: ./.github/workflows/build-and-push.yaml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.REGION }}
+      AWS_ACCOUNTID: ${{ secrets.ACCOUNTID }}
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      SOURCE_REGISTRY: ${{ secrets.SOURCE_REGISTRY }}
+      SOURCE_USERNAME: ${{ secrets.SOURCE_USERNAME }}
+      SOURCE_PASSWORD: ${{ secrets.SOURCE_PASSWORD }}
     with:
       environment: "${{ inputs.environment }}"
       container_tag: "1234"
