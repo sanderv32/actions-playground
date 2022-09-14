@@ -1,15 +1,31 @@
+name: container-cicd
+
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Deploy into
+        required: true
+        type: choice
+        options:
+          - non-prod
+          - prod
 
 jobs:
-  non-prod:
-    name: Build non-production container
+  build-container-cicd:
+    name: Build container
     uses: ./.github/workflows/build-and-push.yaml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.REGION }}
+      AWS_ACCOUNTID: ${{ secrets.ACCOUNTID }}
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      SOURCE_REGISTRY: ${{ secrets.SOURCE_REGISTRY }}
+      SOURCE_USERNAME: ${{ secrets.SOURCE_USERNAME }}
+      SOURCE_PASSWORD: ${{ secrets.SOURCE_PASSWORD }}
     with:
-      environment: "non-prod"
-
-  prod:
-    name: Build production container
-    uses: ./.github/workflows/build-and-push.yaml
-    with:
-      environment: "prod"
+      environment: "${{ inputs.environment }}"
+      container_tag: "1234"
+      registry: "blabla-${{ inputs.environment }}"
+      container_name: "container1"

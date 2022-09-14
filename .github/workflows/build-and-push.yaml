@@ -1,16 +1,42 @@
+name: build-and-push
+
 on:
   workflow_call:
     inputs:
+      registry:
+        description: "Container registry to use"
+        required: true
+        type: string
       container_tag:
         description: "Tag of container"
         required: true
-        default: "test1"
         type: string
       environment:
         description: "Environment to deploy container"
         required: false
         default: "non-prod"
         type: string
+      container_name:
+        description: "Name of the container"
+        required: true
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+      AWS_ACCOUNTID:
+        required: true
+      ECR_REPOSITORY:
+        required: true
+      SOURCE_REGISTRY:
+        required: true
+      SOURCE_USERNAME:
+        required: true
+      SOURCE_PASSWORD:
+        required: true
 
 permissions:
   contents: read
@@ -20,22 +46,58 @@ permissions:
 
 jobs:
   build:
+    if: inputs.environment == 'non-prod'
     name: Build Image
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Build image
         id: tag
+        env:
+          accountid: ${{ secrets.AWS_ACCOUNTID }}
+          region: ${{ secrets.AWS_REGION }}
+          ecr_repository: ${{ secrets.ECR_REPOSITORY }}
+          source_registry: ${{ secrets.SOURCE_REGISTRY }}
+          source_username: ${{ secrets.SOURCE_USERNAME }}
+          source_password: ${{ secrets.SOURCE_PASSWORD }}
         run: |
-          echo "Building"
+          echo "Building ${{ inputs.container_tag }}"
+          export VERSION=$(date +%Y%m%d)
+          docker login -u ${source_username} --password ${source_password} ${source_registry}
+          docker build --build-arg TAG=${{inputs.container_tag}} --tag ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:${VERSION}.${GITHUB_RUN_NUMBER} .
+          docker tag ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:${VERSION}.${GITHUB_RUN_NUMBER} ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:active
 
-  push:
-    name: Push container to ECR
-    needs: build
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-
-    steps:
       - name: Push container to ECR
         run: |
-          echo "Pushing container"
+          echo "Pushing container ${{ inputs.container_tag }}"
+
+  pull_and_push:
+    if: inputs.environment == 'prod'
+    name: Pull and Push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REGION }}
+
+      - name: Pull active container from non-prod
+        run: |
+          echo "....."
+
+      - name: Push container to prod
+        run: |
+          echo "Pushing container to prod"
