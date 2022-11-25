@@ -24,3 +24,6 @@ jobs:
         run: |
           echo "Will only run when you selected active 'yes'"
           echo "$TEST123"
+      - name: blabla
+        run: |
+          echo "$TEST123"
