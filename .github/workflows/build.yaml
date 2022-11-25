@@ -1,0 +1,20 @@
+on:
+  workflow_dispatch:
+    inputs:
+      active:
+        description: Set container as active
+        required: true
+        type: choice
+        options:
+          - "yes"
+          - "no"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: blabla
+        env:
+          active: ${{ inputs.active == 'yes' }}
+        run: |
+          echo "${active}"
