@@ -13,8 +13,10 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     steps:
-      - name: blabla
-        env:
-          active: ${{ inputs.active == 'yes' }}
+      - name: normal run
         run: |
-          echo "${active}"
+          echo "This is always run"
+      - name: set active
+        if: ${{ inputs.active }} == 'yes'
+        run: |
+          echo "Will only run when you selected active 'yes'"
