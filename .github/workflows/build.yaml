@@ -17,7 +17,7 @@ jobs:
         env:
           active: ${{ inputs.active == 'yes' }}
         run: |
-          echo "TEST123=$(date)"
+          echo "TEST123=$(date)" >> $GITHUB_ENV
           echo "This is always run $active"
       - name: set active
         if: ${{ inputs.active == 'yes' }}
