@@ -19,6 +19,6 @@ jobs:
         run: |
           echo "This is always run $active"
       - name: set active
-        if: ${{ inputs.active }} == 'yes'
+        if: ${{ inputs.active == 'yes' }}
         run: |
           echo "Will only run when you selected active 'yes'"
