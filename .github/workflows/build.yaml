@@ -17,8 +17,10 @@ jobs:
         env:
           active: ${{ inputs.active == 'yes' }}
         run: |
+          echo "TEST123=$(date)"
           echo "This is always run $active"
       - name: set active
         if: ${{ inputs.active == 'yes' }}
         run: |
           echo "Will only run when you selected active 'yes'"
+          echo "$TEST123"
