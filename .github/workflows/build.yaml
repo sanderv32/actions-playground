@@ -1,29 +1,29 @@
 on:
   workflow_dispatch:
     inputs:
-      active:
-        description: Set container as active
+      environment:
+        description: Environment
         required: true
         type: choice
         options:
-          - "yes"
-          - "no"
+          - "non-prod"
+          - "prod"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: normal run
-        env:
-          active: ${{ inputs.active == 'yes' }}
+      - name: ${{ inputs.environment }} - Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: docker.io/library/alpine
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+
+      - name: Output meta data
+        shell: bash
         run: |
-          echo "TEST123=$(date)" >> $GITHUB_ENV
-          echo "This is always run $active"
-      - name: set active
-        if: ${{ inputs.active == 'yes' }}
-        run: |
-          echo "Will only run when you selected active 'yes'"
-          echo "$TEST123"
-      - name: blabla
-        run: |
-          echo "$TEST123"
+          echo ${{ steps.meta.outputs }}
