@@ -31,7 +31,7 @@ jobs:
 
       - name: Build and push
         id: build
-        uses: docker/build-path-action@v4
+        uses: docker/build-push-action@v4
         with:
           context: .
           platforms: ${{ matrix.platform }}
