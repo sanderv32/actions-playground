@@ -39,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: docker.io/library/alpine
+          images: ghcr.io/test/test:latest
           tags: |
             type=ref,event=branch
             type=ref,event=pr
