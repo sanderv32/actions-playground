@@ -39,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/test/test:latest
+          images: ghcr.io/test/test
           tags: |
             type=ref,event=branch
             type=ref,event=pr
