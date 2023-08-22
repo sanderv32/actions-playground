@@ -51,8 +51,8 @@ jobs:
         id: build
         uses: docker/build-push-action@v4
         with:
+          push: true
           context: .
-          file: Dockerfile
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
