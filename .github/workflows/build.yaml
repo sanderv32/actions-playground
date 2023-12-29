@@ -1,3 +1,6 @@
+env:
+  SOURCE_REGISTRY: hub.docker.io
+
 on:
   workflow_dispatch:
     inputs:
@@ -20,6 +23,10 @@ jobs:
           - linux/arm64
           - linux/arm64/v8
     steps:
+      - name: Testing
+        run: |
+          echo "${{env.SOURCE_REGISTRY}}"
+
       - name: Checkout
         uses: actions/checkout@v2
 
