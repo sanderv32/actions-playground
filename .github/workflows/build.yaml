@@ -1,6 +1,3 @@
-env:
-  SOURCE_REGISTRY: hub.docker.io
-
 on:
   workflow_dispatch:
     inputs:
@@ -25,7 +22,7 @@ jobs:
     steps:
       - name: Testing
         run: |
-          echo "${{env.SOURCE_REGISTRY}}"
+          echo "${{var.SOURCE_REGISTRY || 'hub.docker.io'}}"
 
       - name: Checkout
         uses: actions/checkout@v2
